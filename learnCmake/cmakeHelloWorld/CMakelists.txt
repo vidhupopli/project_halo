@@ -1,0 +1,13 @@
+# Version of cmake itself.
+# Doesn't matter than much if you're not using advance features.
+cmake_minimum_required(VERSION "3.19.2")
+
+# We are now going to create two projects.
+# Each project is going to have an executable inside of it.
+
+project("firstProjectName")
+add_executable(${CMAKE_PROJECT_NAME} "main.cpp")
+
+project("secondProjectName")
+add_executable(${CMAKE_PROJECT_NAME} "main2.cpp")
+
