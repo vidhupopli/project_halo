@@ -1,0 +1,18 @@
+{
+  "configurations": [
+    {
+      "name": "Emscripten",
+      "includePath": [
+        "${workspaceFolder}/**",
+        "/Users/vidhu/Desktop/emsdk/upstream/emscripten/cache/sysroot/include",
+        "/Users/vidhu/Desktop/emsdk/upstream/emscripten/cache/sysroot/include/SDL2"
+      ],
+      "defines": ["__EMSCRIPTEN__", "__wasm32__"],
+      "compilerPath": "/Users/vidhu/Desktop/emsdk/upstream/emscripten/em++",
+      "cStandard": "c17",
+      "cppStandard": "c++20",
+      "intelliSenseMode": "clang-x64"
+    }
+  ],
+  "version": 4
+}
