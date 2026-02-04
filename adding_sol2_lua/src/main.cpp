@@ -7,6 +7,8 @@ SDL_Window *pWindow(nullptr);
 SDL_Renderer *pRenderer(nullptr);
 sol::state *lua(nullptr);
 
+int boxX{50}, boxY{50};
+
 bool InitSDL()
 {
     std::cout << "Initialising SDL2...\n";
@@ -53,10 +55,26 @@ void RegisterLuaFunctions()
     lua->open_libraries(sol::lib::base);
 
     // Bind C++ function to Lua
-    (*lua)["Naam_Jap"] = []()
+    (*lua)["naamJap"] = []()
     {
         std::cout << "Jai Gurudev\n";
         std::cout << "Hari Narayan Gurudev\n";
+    };
+
+    (*lua)["moveBox"] = [](int inputX, int inputY)
+    {
+        boxX = inputX;
+        boxY = inputY;
+    };
+
+    (*lua)["getBoxX"] = []() -> int
+    {
+        return boxX;
+    };
+
+    (*lua)["getBoxY"] = []() -> int
+    {
+        return boxY;
     };
 
     std::cout << "Lua functions registered\n";
@@ -87,12 +105,15 @@ void GameLoop()
         }
     }
 
+    // Call Lua update function for animation
+    (*lua)["update"]();
+
     // Drawing rectangle.
     SDL_SetRenderDrawColor(pRenderer, 0, 0, 0, 255);
     SDL_RenderClear(pRenderer);
 
     SDL_SetRenderDrawColor(pRenderer, 255, 0, 0, 255);
-    SDL_Rect box{50, 50, 50, 50}; // Struct variable creation: x, y, width, height
+    SDL_Rect box{boxX, boxY, 50, 50}; // Struct variable creation: x_pos, y_pos, width, height
     SDL_RenderFillRect(pRenderer, &box);
 
     SDL_RenderPresent(pRenderer);
