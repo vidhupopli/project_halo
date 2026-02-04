@@ -1,9 +1,11 @@
 #include <SDL2/SDL.h>
 #include <emscripten.h>
 #include <iostream>
+#include "sol/sol.hpp"
 
 SDL_Window *pWindow(nullptr);
 SDL_Renderer *pRenderer(nullptr);
+sol::state lua;
 
 bool InitSDL()
 {
@@ -42,6 +44,13 @@ void CleanUp()
     SDL_Quit();
 }
 
+void RegisterLuaFunctions()
+{
+    lua.open_libraries(sol::lib::base);
+    lua["Naam_Jap"] = []
+    { std::cout << "Jai Gurudev\n"; };
+}
+
 void GameLoop()
 {
     SDL_Event event;
@@ -53,6 +62,8 @@ void GameLoop()
             emscripten_cancel_main_loop();
         }
     }
+
+    lua.safe_script_file("assets/scripts/main.lua");
 
     // Drawing rectangle.
     SDL_SetRenderDrawColor(pRenderer, 0, 0, 0, 255);
@@ -74,6 +85,7 @@ int main()
         return 1;
     }
 
+    RegisterLuaFunctions();
     std::cout << "Entering game loop...\n";
     emscripten_set_main_loop(GameLoop, 0, 1);
 

@@ -5,7 +5,9 @@
       "includePath": [
         "${workspaceFolder}/**",
         "/Users/vidhu/Desktop/emsdk/upstream/emscripten/cache/sysroot/include",
-        "/Users/vidhu/Desktop/emsdk/upstream/emscripten/cache/sysroot/include/SDL2"
+        "/Users/vidhu/Desktop/emsdk/upstream/emscripten/cache/sysroot/include/SDL2",
+        "/Users/vidhu/Desktop/project_halo/adding_sol2_lua/dependencies/sol2/include",
+        "/Users/vidhu/Desktop/project_halo/adding_sol2_lua/dependencies/lua"
       ],
       "defines": ["__EMSCRIPTEN__", "__wasm32__"],
       "compilerPath": "/Users/vidhu/Desktop/emsdk/upstream/emscripten/em++",
