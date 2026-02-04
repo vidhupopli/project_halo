@@ -5,7 +5,7 @@
 
 SDL_Window *pWindow(nullptr);
 SDL_Renderer *pRenderer(nullptr);
-sol::state lua;
+sol::state *lua(nullptr);
 
 bool InitSDL()
 {
@@ -42,13 +42,8 @@ void CleanUp()
     SDL_DestroyRenderer(pRenderer);
     SDL_DestroyWindow(pWindow);
     SDL_Quit();
-}
-
-void RegisterLuaFunctions()
-{
-    lua.open_libraries(sol::lib::base);
-    lua["Naam_Jap"] = []
-    { std::cout << "Jai Gurudev\n"; };
+    if (lua)
+        delete lua;
 }
 
 void GameLoop()
@@ -62,8 +57,6 @@ void GameLoop()
             emscripten_cancel_main_loop();
         }
     }
-
-    lua.safe_script_file("assets/scripts/main.lua");
 
     // Drawing rectangle.
     SDL_SetRenderDrawColor(pRenderer, 0, 0, 0, 255);
@@ -85,7 +78,27 @@ int main()
         return 1;
     }
 
-    RegisterLuaFunctions();
+    // Initialize Lua
+    std::cout << "Creating Lua state...\n";
+    lua = new sol::state();
+    std::cout << "Lua state created\n";
+
+    lua->open_libraries(sol::lib::base);
+    std::cout << "Lua libraries opened successfully\n";
+
+    // Load and execute the Lua script
+    std::cout << "Loading Lua script...\n";
+    auto result = lua->safe_script_file("assets/scripts/main.lua");
+    if (!result.valid())
+    {
+        sol::error err = result;
+        std::cerr << "Lua script error: " << err.what() << "\n";
+    }
+    else
+    {
+        std::cout << "Lua script executed successfully\n";
+    }
+
     std::cout << "Entering game loop...\n";
     emscripten_set_main_loop(GameLoop, 0, 1);
 
