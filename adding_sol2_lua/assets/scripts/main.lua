@@ -1,2 +1,1 @@
--- Empty for now, just testing Lua loading
-print("Hari Narayan")
+Naam_Jap()

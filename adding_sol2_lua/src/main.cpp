@@ -46,6 +46,35 @@ void CleanUp()
         delete lua;
 }
 
+void RegisterLuaFunctions()
+{
+    std::cout << "Initializing Lua...\n";
+    lua = new sol::state();
+    lua->open_libraries(sol::lib::base);
+
+    // Bind C++ function to Lua
+    (*lua)["Naam_Jap"] = []()
+    {
+        std::cout << "Jai Gurudev\n";
+        std::cout << "Hari Narayan Gurudev\n";
+    };
+
+    std::cout << "Lua functions registered\n";
+
+    // Load and execute the Lua script
+    std::cout << "Loading Lua script...\n";
+    auto result = lua->safe_script_file("assets/scripts/main.lua");
+    if (!result.valid())
+    {
+        sol::error err = result;
+        std::cerr << "Lua script error: " << err.what() << "\n";
+    }
+    else
+    {
+        std::cout << "Lua script executed successfully\n";
+    }
+}
+
 void GameLoop()
 {
     SDL_Event event;
@@ -78,26 +107,7 @@ int main()
         return 1;
     }
 
-    // Initialize Lua
-    std::cout << "Creating Lua state...\n";
-    lua = new sol::state();
-    std::cout << "Lua state created\n";
-
-    lua->open_libraries(sol::lib::base);
-    std::cout << "Lua libraries opened successfully\n";
-
-    // Load and execute the Lua script
-    std::cout << "Loading Lua script...\n";
-    auto result = lua->safe_script_file("assets/scripts/main.lua");
-    if (!result.valid())
-    {
-        sol::error err = result;
-        std::cerr << "Lua script error: " << err.what() << "\n";
-    }
-    else
-    {
-        std::cout << "Lua script executed successfully\n";
-    }
+    RegisterLuaFunctions();
 
     std::cout << "Entering game loop...\n";
     emscripten_set_main_loop(GameLoop, 0, 1);
